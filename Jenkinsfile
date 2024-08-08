@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     options{
-        // Max number of build logs to keep and days to keep
         buildDiscarder(logRotator(numToKeepStr: '5', daysToKeepStr: '5'))
-        // Enable timestamp at each job in the pipeline
         timestamps()
     }
 
     environment{
         registry = 'bmd1905/jenkins101_gitlab'
-        registryCredential = 'dockerhub'      
+        registryCredential = 'dockerhub'
+        containerName = 'my-app-container'
+        dockerImage = ''
     }
 
     stages {
@@ -41,9 +41,18 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying models..'
-                echo 'Running a script to trigger pull and start a docker container'
-                bash "docker pull $registry:$BUILD_NUMBER"
-                bash 'docker run -d -p 5000:5000 --name mycontainer $registry:$BUILD_NUMBER'
+                sh """
+                    # Stop and remove the existing container if it exists
+                    docker stop ${containerName} || true
+                    docker rm ${containerName} || true
+
+                    # Pull the latest image
+                    docker pull ${registry}:latest
+
+                    # Run the new container
+                    docker run -d --name ${containerName} -p 8080:8080 ${registry}:latest
+                """
+                echo 'Deployment completed'
             }
         }
     }
