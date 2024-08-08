@@ -50,7 +50,7 @@ pipeline {
                     docker pull ${registry}:latest
 
                     # Run the new container
-                    docker run -d --name ${containerName} -p 8080:8080 ${registry}:latest
+                    docker run -d --name ${containerName} -p 8080:8080 -p 30000:30000 ${registry}:latest
                 """
                 echo 'Deployment completed'
             }
