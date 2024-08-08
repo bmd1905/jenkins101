@@ -56,6 +56,7 @@ pipeline {
                         echo 'Deployment completed'
                     } catch (Exception e) {
                         echo 'Deployment failed: ${e.getMessage()}'
+                        // error 'Deployment failed'
                         currentBuild.result = 'FAILURE'
                     }
                 }
