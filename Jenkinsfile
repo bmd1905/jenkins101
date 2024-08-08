@@ -9,7 +9,7 @@ pipeline {
     }
 
     environment{
-        registry = 'bmd1905/jenkins101'
+        registry = 'bmd1905/jenkins101_gitlab'
         registryCredential = 'dockerhub'      
     }
 
