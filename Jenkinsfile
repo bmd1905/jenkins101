@@ -42,6 +42,8 @@ pipeline {
             steps {
                 echo 'Deploying models..'
                 echo 'Running a script to trigger pull and start a docker container'
+                bash "docker pull $registry:$BUILD_NUMBER"
+                bash 'docker run -d -p 5000:5000 --name mycontainer $registry:$BUILD_NUMBER'
             }
         }
     }
